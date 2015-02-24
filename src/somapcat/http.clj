@@ -8,12 +8,16 @@
                                     HttpTransportMetricsImpl)))
 
 (defn header-map
+  "Takes an array of Header objects and returns a map of header names to their
+  values."
   [headers]
   (let [ks (map #(.getName %) headers)
         vs (map #(.getValue %) headers)]
     (zipmap ks vs)))
 
 (defn read-session-input-buffer
+  "Reads a SessionInputBufferImpl object bound to a ByteArrayInputStream.
+  Returns a string representation of its contents."
   [buff]
   (loop [s []
          b buff]
