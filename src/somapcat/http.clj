@@ -27,23 +27,28 @@
              b))))
 
 ;; Inspired by http://stackoverflow.com/questions/9261109/is-there-any-simple-http-response-parser-for-java
-(defn parse-response
-  "Given a byte array, returns a Ring repsonse map with its contents."
+
+(defn bytearray->httpresponse
   [b]
   (let [buff (SessionInputBufferImpl. (HttpTransportMetricsImpl.) 2048)
         bais (ByteArrayInputStream. b)]
-    (do
-      (.bind buff bais))
-      (let [parser (DefaultHttpResponseParser. buff)
-            parsed (.parse parser)
-            headers (header-map (.getAllHeaders parsed))
-            status (->> parsed
-                        (.getStatusLine)
-                        (.getStatusCode))
-            body (read-session-input-buffer buff)]
-        {:headers headers
-         :status status
-         :body body})))
+    (doto buff
+      (.bind bais))))
+
+(defn parse-response
+  "Given a byte array, returns a Ring repsonse map with its contents."
+  [b]
+  (let [buff (bytearray->httpresponse b)
+        parser (DefaultHttpResponseParser. buff)
+        parsed (.parse parser)
+        headers (header-map (.getAllHeaders parsed))
+        status (->> parsed
+                    (.getStatusLine)
+                    (.getStatusCode))
+        body (read-session-input-buffer buff)]
+    {:headers headers
+     :status status
+     :body body}))
 
 (defn request->string
   "Given a Ring request map, returns a string representation of it suitable for
