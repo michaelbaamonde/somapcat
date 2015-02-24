@@ -5,7 +5,7 @@
 
 (def docker-socket "/var/run/docker.sock")
 
-(def message "GET /images/json HTTP/1.1\r\n\n")
+(def message "GET /info HTTP/1.1\r\n\n")
 
 (defn -main
   []
