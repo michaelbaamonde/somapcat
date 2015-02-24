@@ -1,7 +1,6 @@
 (ns somapcat.core
   (:require [net.n01se.clojure-jna :as jna]
-            [byte-streams :as b]
-            [clojure.core.async :as async]))
+            [byte-streams :as b]))
 
 ;; TODO timeouts, with-connection macro (?), async requests
 
