@@ -27,7 +27,6 @@
              b))))
 
 ;; Inspired by http://stackoverflow.com/questions/9261109/is-there-any-simple-http-response-parser-for-java
-
 (defn bytearray->httpresponse
   [b]
   (let [buff (SessionInputBufferImpl. (HttpTransportMetricsImpl.) 2048)
