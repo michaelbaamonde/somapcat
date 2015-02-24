@@ -54,17 +54,24 @@
       (jna/invoke Integer c/recv socket buff n 0)
       "Unable to receive message.")))
 
+(defn close
+  [sock]
+  (jna/when-err
+   (jna/invoke Integer c/close sock)
+   "Unable to close socket."))
+
+; TODO: Optionally leave socket open.
 (defn send
   "Two-arity creates a *new* socket, connects to a given address, sends the
   message, and returns a DirectByteBuffer with the response. Three-arity does
   the same but takes an existing socket as an argument."
-  ([dest message]
+  ([struct message]
    (let [socket (create-socket AF_UNIX SOCK_STREAM 0)]
-     (send dest message socket)))
-  ([dest message socket]
-   (do (connect socket dest)
-       (send* socket message)
-       (close socket))))
-
-(defmacro with-connection
-  "Runs supplied fns within the context of a connection to a given socket.")
+     (send struct message socket)))
+  ([struct message socket]
+   (let [buff (jna/make-cbuf 2048)]
+     (do (connect socket struct)
+         (send* socket message)
+         (receive socket buff)
+         (close socket))
+     buff)))
