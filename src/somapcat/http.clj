@@ -2,7 +2,7 @@
   "Communicate with Unix domain sockets via classical Ring request maps."
   (:require [clojure.java.io :as io]
             [byte-streams :as b])
-  (:import (java.io ByteArrayInputStream InputStream IOException)
+  (:import (java.io ByteArrayInputStream)
            (org.apache.http.impl.io DefaultHttpResponseParser
                                     SessionInputBufferImpl
                                     HttpTransportMetricsImpl)))
