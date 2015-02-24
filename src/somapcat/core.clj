@@ -62,15 +62,20 @@
 ; TODO: Optionally leave socket open.
 (defn send
   "Two-arity creates a *new* socket, connects to a given address, sends the
-  message, and returns a DirectByteBuffer with the response. Three-arity does
-  the same but takes an existing socket as an argument."
+  message, closes the socket, and returns a DirectByteBuffer with the response.
+  Three-arity does the same but takes an existing socket as an argument and
+  leaves it open."
   ([struct message]
-   (let [socket (create-socket AF_UNIX SOCK_STREAM 0)]
-     (send struct message socket)))
-  ([struct message socket]
-   (let [buff (jna/make-cbuf 2048)]
+   (let [socket (create-socket AF_UNIX SOCK_STREAM 0)
+         buff (jna/make-cbuf 2048)]
      (do (connect socket struct)
          (send* socket message)
          (receive socket buff)
          (close socket))
+     buff))
+  ([struct message socket]
+   (let [buff (jna/make-cbuf 2048)]
+     (do (connect socket struct)
+         (send* socket message)
+         (receive socket buff))
      buff)))
