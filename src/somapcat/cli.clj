@@ -9,7 +9,8 @@
 
 (defn -main
   []
-  (let [struct {:sun-family s/AF_UNIX
-                :sun-path docker-socket}
-        bytes (s/send struct message)]
-      (clojure.pprint/pprint (http/parse-response (b/to-byte-array bytes)))))
+  (clojure.pprint/pprint
+   (http/request {:request-method "GET"
+                  :scheme "HTTP"
+                  :uri "/var/run/docker.sock"
+                  :query-string "/info"})))

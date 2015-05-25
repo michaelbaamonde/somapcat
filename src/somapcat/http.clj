@@ -1,7 +1,8 @@
 (ns somapcat.http
   "Communicate with Unix domain sockets via classical Ring request maps."
   (:require [clojure.java.io :as io]
-            [byte-streams :as b])
+            [byte-streams :as b]
+            [somapcat.core :as s])
   (:import (java.io ByteArrayInputStream)
            (org.apache.http.impl.io DefaultHttpResponseParser
                                     SessionInputBufferImpl
@@ -49,13 +50,20 @@
      :status status
      :body body}))
 
-(defn request->string
-  "Given a Ring request map, returns a string representation of it suitable for
-  passing to struct-to-byte-buffer."
-  [scheme request-method uri]
-  (let [ending "/1.1\r\n\n"
+(defn generate-query-string
+  [scheme request-method query]
+  (let [suffix "/1.1\r\n\n"
         scheme (-> scheme
                    (name)
                    (.toUpperCase)
-                   (str ending))]
-     (str request-method " " uri " " scheme)))
+                   (str suffix))]
+     (str request-method " " query " " scheme)))
+
+(defn request
+  [{:keys [request-method scheme uri query-string] :as req}]
+  (let [struct {:sun-family s/AF_UNIX
+                :sun-path uri}
+        message (generate-query-string scheme request-method query-string)]
+    (-> (s/send struct message)
+        b/to-byte-array
+        parse-response)))
