@@ -67,3 +67,10 @@
     (-> (s/send struct message)
         b/to-byte-array
         parse-response)))
+
+(defn get
+  [uri query]
+  (request {:request-method "GET"
+            :scheme "HTTP"
+            :uri uri
+            :query-string query}))
