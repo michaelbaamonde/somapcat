@@ -3,10 +3,6 @@
             [somapcat.core :as s]
             [somapcat.http :as http]))
 
-(def docker-socket "/var/run/docker.sock")
-
-(def message "GET /info HTTP/1.1\r\n\n")
-
 (defn -main
   []
   (clojure.pprint/pprint
