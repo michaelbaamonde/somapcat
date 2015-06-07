@@ -1,6 +1,5 @@
 (ns somapcat.cli
-  (:require [byte-streams :as b]
-            [somapcat.http :as http]))
+  (:require [somapcat.http :as http]))
 
 (defn -main
   []
