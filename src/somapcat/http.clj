@@ -37,7 +37,7 @@
 
 (defn parse-response
   "Given a byte array, returns a Ring repsonse map with its contents."
-  [b]
+  [b req]
   (let [buff (bytearray->httpresponse b)
         parser (DefaultHttpResponseParser. buff)
         parsed (.parse parser)
@@ -48,7 +48,7 @@
         body (read-session-input-buffer buff)]
     {:headers headers
      :status status
-     :body body}))
+     :body (when-not (= (:request-method req) "HEAD") body)}))
 
 (defn generate-query-string
   [scheme request-method query]
@@ -66,7 +66,7 @@
         message (generate-query-string scheme request-method query-string)]
     (-> (s/send struct message)
         b/to-byte-array
-        parse-response)))
+        (parse-response req))))
 
 (defn get
   [uri query]
