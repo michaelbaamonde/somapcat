@@ -2,8 +2,6 @@
   (:require [net.n01se.clojure-jna :as jna]
             [byte-streams :as b]))
 
-;; TODO timeouts, with-connection macro (?), async requests
-
 (defonce AF_UNIX 1)
 
 (defonce SOCK_STREAM 1)
@@ -32,7 +30,6 @@
    (jna/invoke Integer c/socket family type flags)
    "Unable to create socket."))
 
-;; TODO: Make this take a destination string as opposed to a 'struct.'
 (defn connect
   [socket struct]
   (let [ptr (struct-to-byte-buffer struct)
@@ -59,7 +56,6 @@
    (jna/invoke Integer c/close sock)
    "Unable to close socket."))
 
-; TODO: Optionally leave socket open.
 (defn send
   "Two-arity creates a *new* socket, connects to a given address, sends the
   message, closes the socket, and returns a DirectByteBuffer with the response.
