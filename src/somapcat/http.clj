@@ -74,3 +74,31 @@
             :scheme "HTTP"
             :uri uri
             :query-string query}))
+
+(defn post
+  [uri query]
+  (request {:request-method "POST"
+            :scheme "HTTP"
+            :uri uri
+            :query-string query}))
+
+(defn put
+  [uri query]
+  (request {:request-method "PUT"
+            :scheme "HTTP"
+            :uri uri
+            :query-string query}))
+
+(defn delete
+  [uri query]
+  (request {:request-method "DELETE"
+            :scheme "HTTP"
+            :uri uri
+            :query-string query}))
+
+(defn head
+  [uri query]
+  (request {:request-method "HEAD"
+            :scheme "HTTP"
+            :uri uri
+            :query-string query}))
