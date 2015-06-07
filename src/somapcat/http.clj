@@ -57,7 +57,7 @@
                    (name)
                    (.toUpperCase)
                    (str suffix))]
-     (str request-method " " query " " scheme)))
+    (str request-method " " query " " scheme)))
 
 (defn request
   [{:keys [request-method scheme uri query-string] :as req}]
